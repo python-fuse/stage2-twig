@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Cache
+cache/
+
+# Build outputs
+public/styles.css
+
+# Environment
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

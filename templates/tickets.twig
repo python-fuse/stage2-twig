@@ -1,0 +1,431 @@
+{% extends "base.twig" %}
+
+{% block body %}
+{% set current_page = 'tickets' %}
+
+<div class="flex h-screen bg-gray-50">
+  <div class="hidden lg:flex lg:shrink-0">
+    <div class="w-64 bg-white border-r">
+      <div class="flex flex-col h-full">
+        <div class="p-6 border-b">
+          <h2 class="text-2xl font-bold text-blue-600">Ticketly</h2>
+          <p class="text-sm text-gray-600 mt-1" id="sidebar-user-name">Welcome</p>
+        </div>
+
+        <nav class="flex-1 p-4 space-y-2">
+          <a
+            href="?page=dashboard"
+            class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors text-gray-700 hover:bg-gray-100"
+          >
+            <span>Dashboard</span>
+          </a>
+
+          <a
+            href="?page=tickets"
+            class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors bg-blue-100 text-blue-700 font-medium"
+          >
+            <span>Tickets</span>
+          </a>
+        </nav>
+
+        <div class="p-4 border-t bg-gray-50">
+          <h3 class="text-sm font-medium text-gray-900 mb-3">Quick Stats</h3>
+          <div class="space-y-2" id="sidebar-stats">
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-600">Total</span>
+              <span class="text-sm font-medium text-blue-600" id="stat-total">0</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-600">Open</span>
+              <span class="text-sm font-medium text-green-600" id="stat-open">0</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-600">In Progress</span>
+              <span class="text-sm font-medium text-amber-600" id="stat-in-progress">0</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-600">Closed</span>
+              <span class="text-sm font-medium text-gray-600" id="stat-closed">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 border-t">
+          <button
+            onclick="handleLogout()"
+            class="w-full px-4 py-2 text-sm font-medium rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            <span class="mr-2">👋</span>
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="sidebar-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"></div>
+
+  <div id="mobile-sidebar" class="fixed inset-y-0 left-0 w-80 bg-white transform -translate-x-full transition-transform duration-300 ease-in-out z-50 lg:hidden">
+    <div class="flex flex-col h-full">
+      <div class="p-6 border-b">
+        <h2 class="text-2xl font-bold text-blue-600">Ticketly</h2>
+        <p class="text-sm text-gray-600 mt-1" id="mobile-sidebar-user-name">Welcome</p>
+      </div>
+
+      <nav class="flex-1 p-4 space-y-2">
+        <a
+          href="?page=dashboard"
+          class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors text-gray-700 hover:bg-gray-100"
+          onclick="toggleMobileMenu()"
+        >
+          <span>Dashboard</span>
+        </a>
+
+        <a
+          href="?page=tickets"
+          class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors bg-blue-100 text-blue-700 font-medium"
+          onclick="toggleMobileMenu()"
+        >
+          <span>Tickets</span>
+        </a>
+      </nav>
+
+      <div class="p-4 border-t bg-gray-50">
+        <h3 class="text-sm font-medium text-gray-900 mb-3">Quick Stats</h3>
+        <div class="space-y-2" id="mobile-sidebar-stats">
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-gray-600">Total</span>
+            <span class="text-sm font-medium text-blue-600" id="mobile-stat-total">0</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-gray-600">Open</span>
+            <span class="text-sm font-medium text-green-600" id="mobile-stat-open">0</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-gray-600">In Progress</span>
+            <span class="text-sm font-medium text-amber-600" id="mobile-stat-in-progress">0</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-gray-600">Closed</span>
+            <span class="text-sm font-medium text-gray-600" id="mobile-stat-closed">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4 border-t">
+        <button
+          onclick="handleLogout()"
+          class="w-full px-4 py-2 text-sm font-medium rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-colors"
+        >
+          <span class="mr-2">👋</span>
+          Logout
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex-1 flex flex-col overflow-hidden">
+    <div class="lg:hidden bg-white border-b px-4 py-3 flex items-center justify-between">
+      <h1 class="text-xl font-bold text-blue-600">Ticketly</h1>
+      <button
+        id="mobile-menu-button"
+        class="p-2 rounded-md hover:bg-gray-100 transition-colors"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="flex-1 overflow-auto">
+      <div class="max-w-[1440px] mx-auto">
+        <div class="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50 min-h-screen">
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+    <h1 class="text-3xl font-bold">Ticket Management</h1>
+    <button
+      onclick="openCreateTicketModal()"
+      class="bg-blue-600 text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 transition-colors text-lg"
+    >
+      + Create New Ticket
+    </button>
+  </div>
+
+  <div class="mb-6 flex flex-col sm:flex-row gap-4">
+    <div class="flex-1">
+      <input
+        type="text"
+        id="search-input"
+        placeholder="Search tickets by title or description..."
+        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        onkeyup="filterTickets()"
+      />
+    </div>
+    <div class="flex gap-2 flex-wrap">
+      <button
+        onclick="setStatusFilter('all')"
+        class="filter-btn px-4 py-2 text-sm font-medium rounded-md border transition-colors bg-blue-600 text-white"
+        data-filter="all"
+      >
+        All
+      </button>
+      <button
+        onclick="setStatusFilter('open')"
+        class="filter-btn px-4 py-2 text-sm font-medium rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-colors"
+        data-filter="open"
+      >
+        Open
+      </button>
+      <button
+        onclick="setStatusFilter('in_progress')"
+        class="filter-btn px-4 py-2 text-sm font-medium rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-colors"
+        data-filter="in_progress"
+      >
+        In Progress
+      </button>
+      <button
+        onclick="setStatusFilter('closed')"
+        class="filter-btn px-4 py-2 text-sm font-medium rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-colors"
+        data-filter="closed"
+      >
+        Closed
+      </button>
+    </div>
+  </div>
+
+  <div id="tickets-container">
+    <div id="empty-state" class="hidden bg-white border border-gray-200 rounded-lg shadow">
+      <div class="p-12 text-center">
+        <p class="text-gray-600 text-lg mb-4">No tickets yet. Create your first ticket!</p>
+        <button
+          onclick="openCreateTicketModal()"
+          class="bg-blue-600 text-white px-6 py-2 rounded-md font-medium hover:bg-blue-700 transition-colors"
+        >
+          Create Your First Ticket
+        </button>
+      </div>
+    </div>
+
+    <div id="no-results-state" class="hidden bg-white border border-gray-200 rounded-lg shadow">
+      <div class="p-12 text-center">
+        <p class="text-gray-600 text-lg">No tickets match your current filters.</p>
+      </div>
+    </div>
+
+    <div id="tickets-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    </div>
+  </div>
+
+  {# Stats Footer #}
+  <div id="tickets-stats" class="mt-8 text-center text-gray-600 hidden">
+    <p id="stats-text"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include 'modals/create-ticket.twig' %}
+{% include 'modals/edit-ticket.twig' %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Update sidebar with user info and stats
+function updateSidebar() {
+  const user = getCurrentUser();
+  const stats = getTicketStats();
+  
+  // Update user name
+  if (user) {
+    const userName = `Welcome, ${user.name}`;
+    const desktopName = document.getElementById('sidebar-user-name');
+    const mobileName = document.getElementById('mobile-sidebar-user-name');
+    if (desktopName) desktopName.textContent = userName;
+    if (mobileName) mobileName.textContent = userName;
+  }
+  
+  // Update stats - Desktop
+  document.getElementById('stat-total').textContent = stats.total;
+  document.getElementById('stat-open').textContent = stats.open;
+  document.getElementById('stat-in-progress').textContent = stats.inProgress;
+  document.getElementById('stat-closed').textContent = stats.closed;
+  
+  // Update stats - Mobile
+  document.getElementById('mobile-stat-total').textContent = stats.total;
+  document.getElementById('mobile-stat-open').textContent = stats.open;
+  document.getElementById('mobile-stat-in-progress').textContent = stats.inProgress;
+  document.getElementById('mobile-stat-closed').textContent = stats.closed;
+}
+
+// Handle logout
+function handleLogout() {
+  localStorage.removeItem('ticketapp_session');
+  localStorage.removeItem('ticketapp_user');
+  showToast('Logged out successfully', 'success');
+  setTimeout(() => {
+    window.location.href = '?page=landing';
+  }, 500);
+}
+
+let currentStatusFilter = 'all';
+let currentSearchTerm = '';
+
+// Format date
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
+
+// Get status badge HTML
+function getStatusBadge(status) {
+  const colors = {
+    open: { bg: 'bg-green-100', text: 'text-green-800' },
+    in_progress: { bg: 'bg-amber-100', text: 'text-amber-800' },
+    closed: { bg: 'bg-gray-100', text: 'text-gray-800' }
+  };
+  const statusText = status === 'in_progress' ? 'In Progress' : 
+                     status.charAt(0).toUpperCase() + status.slice(1);
+  const color = colors[status];
+  return `<span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${color.bg} ${color.text}">${statusText}</span>`;
+}
+
+// Get priority color
+function getPriorityColor(priority) {
+  const colors = {
+    high: 'text-red-600',
+    medium: 'text-yellow-600',
+    low: 'text-green-600'
+  };
+  return colors[priority] || 'text-gray-600';
+}
+
+// Render tickets
+function renderTickets() {
+  const tickets = getTickets();
+  const filteredTickets = tickets.filter(ticket => {
+    const matchesSearch = !currentSearchTerm || 
+      ticket.title.toLowerCase().includes(currentSearchTerm.toLowerCase()) ||
+      (ticket.description && ticket.description.toLowerCase().includes(currentSearchTerm.toLowerCase()));
+    const matchesStatus = currentStatusFilter === 'all' || ticket.status === currentStatusFilter;
+    return matchesSearch && matchesStatus;
+  });
+
+  const grid = document.getElementById('tickets-grid');
+  const emptyState = document.getElementById('empty-state');
+  const noResultsState = document.getElementById('no-results-state');
+  const statsDiv = document.getElementById('tickets-stats');
+  const statsText = document.getElementById('stats-text');
+
+  if (tickets.length === 0) {
+    emptyState.classList.remove('hidden');
+    noResultsState.classList.add('hidden');
+    grid.classList.add('hidden');
+    statsDiv.classList.add('hidden');
+    return;
+  }
+
+  if (filteredTickets.length === 0) {
+    emptyState.classList.add('hidden');
+    noResultsState.classList.remove('hidden');
+    grid.classList.add('hidden');
+    statsDiv.classList.add('hidden');
+    return;
+  }
+
+  emptyState.classList.add('hidden');
+  noResultsState.classList.add('hidden');
+  grid.classList.remove('hidden');
+  statsDiv.classList.remove('hidden');
+
+  grid.innerHTML = filteredTickets.map(ticket => `
+    <div class="bg-white border border-gray-200 rounded-lg shadow hover:shadow-lg transition-shadow duration-200">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <div class="flex justify-between items-start mb-2">
+          <h3 class="text-lg font-semibold line-clamp-2 flex-1">${ticket.title}</h3>
+          ${getStatusBadge(ticket.status)}
+        </div>
+        <div class="flex items-center gap-4 text-sm text-gray-600">
+          ${ticket.priority ? `<span class="font-medium ${getPriorityColor(ticket.priority)}">${ticket.priority.charAt(0).toUpperCase() + ticket.priority.slice(1)} Priority</span>` : ''}
+          <span>Created: ${formatDate(ticket.createdAt)}</span>
+        </div>
+      </div>
+      <div class="p-6 space-y-4">
+        ${ticket.description ? `<p class="text-gray-700 line-clamp-3">${ticket.description}</p>` : ''}
+        
+        <div class="flex justify-between items-center pt-2">
+          <span class="text-xs text-gray-500">Updated: ${formatDate(ticket.updatedAt)}</span>
+          <div class="flex gap-2">
+            <button
+              onclick="openEditTicketModal('${ticket.id}')"
+              class="px-4 py-2 text-sm font-medium rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-colors"
+            >
+              Edit
+            </button>
+            <button
+              onclick="handleDeleteTicket('${ticket.id}', '${ticket.title.replace(/'/g, "\\'")}')"
+              class="px-4 py-2 text-sm font-medium rounded-md bg-red-600 text-white hover:bg-red-700 transition-colors"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  // Update stats
+  const statusText = currentStatusFilter === 'all' ? '' : ` (filtered by ${currentStatusFilter === 'in_progress' ? 'In Progress' : currentStatusFilter.charAt(0).toUpperCase() + currentStatusFilter.slice(1)})`;
+  statsText.textContent = `Showing ${filteredTickets.length} of ${tickets.length} tickets${statusText}`;
+}
+
+// Filter tickets
+function filterTickets() {
+  currentSearchTerm = document.getElementById('search-input').value;
+  renderTickets();
+}
+
+// Set status filter
+function setStatusFilter(status) {
+  currentStatusFilter = status;
+  
+  // Update button styles
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    if (btn.dataset.filter === status) {
+      btn.className = 'filter-btn px-4 py-2 text-sm font-medium rounded-md border transition-colors bg-blue-600 text-white';
+    } else {
+      btn.className = 'filter-btn px-4 py-2 text-sm font-medium rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-colors';
+    }
+  });
+  
+  renderTickets();
+}
+
+// Delete ticket handler
+function handleDeleteTicket(ticketId, ticketTitle) {
+  if (confirm(`Are you sure you want to delete "${ticketTitle}"? This action cannot be undone.`)) {
+    deleteTicket(ticketId);
+    showToast('Ticket deleted successfully', 'success');
+    renderTickets();
+    updateSidebar();
+  }
+}
+
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+  // Check authentication
+  if (!isAuthenticated()) {
+    window.location.href = '?page=login';
+    return;
+  }
+  
+  updateSidebar();
+  renderTickets();
+});
+</script>
+{% endblock %}
