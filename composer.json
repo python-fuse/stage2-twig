@@ -8,6 +8,16 @@
             "Ucodes\\Ticketly\\": "src/"
         }
     },
+    "scripts": {
+        "post-install-cmd": [
+            "npm install",
+            "npm run build:css"
+        ],
+        "post-update-cmd": [
+            "npm install",
+            "npm run build:css"
+        ]
+    },
     "authors": [
         {
             "name": "python-fuse",
