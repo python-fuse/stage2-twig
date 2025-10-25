@@ -1,0 +1,17 @@
+{
+    "name": "ucodes/ticketly",
+    "require": {
+        "twig/twig": "^3.21"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ucodes\\Ticketly\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "python-fuse",
+            "email": "hauwamuktar880@gmail.com"
+        }
+    ]
+}
