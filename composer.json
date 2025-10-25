@@ -1,27 +1,27 @@
 {
-    "name": "ucodes/ticketly",
-    "require": {
-        "twig/twig": "^3.21"
-    },
-    "autoload": {
-        "psr-4": {
-            "Ucodes\\Ticketly\\": "src/"
-        }
-    },
-    "scripts": {
-        "post-install-cmd": [
-            "npm install",
-            "npm run build:css"
-        ],
-        "post-update-cmd": [
-            "npm install",
-            "npm run build:css"
-        ]
-    },
-    "authors": [
-        {
-            "name": "python-fuse",
-            "email": "hauwamuktar880@gmail.com"
-        }
+  "name": "ucodes/ticketly",
+  "require": {
+    "twig/twig": "^3.21"
+  },
+  "autoload": {
+    "psr-4": {
+      "Ucodes\\Ticketly\\": "src/"
+    }
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "npm install",
+      "npm run build:css"
+    ],
+    "post-update-cmd": [
+      "npm install",
+      "npm run build:css"
     ]
+  },
+  "authors": [
+    {
+      "name": "python-fuse",
+      "email": "hauwamuktar880@gmail.com"
+    }
+  ]
 }
